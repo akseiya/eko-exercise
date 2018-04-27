@@ -14,14 +14,15 @@ class graphRunner {
         });
     }
 
-    checkDirectRoute(from, to) {
+    checkDirectRoute(from, to, strict = true) {
         if(!this.edges[from] || !this.edges[from][to]) {
-            throw new Error('No Such Route');
+            if(strict) throw new Error('No Such Route');
+            return null;
         }
         return this.edges[from][to];
     }
 
-    followRoute(routeSpec) {
+    followDirectRoute(routeSpec) {
         let totalCost = 0;
         let [from, ...route] = routeSpec.split('-');
         route.forEach(nextNode => {
