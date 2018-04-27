@@ -11,8 +11,23 @@ describe('Graph runner', () => {
             expect(runner.edges).to.be.an('object');
             expect(runner.edges).to.have.keys(['A', 'B', 'C', 'D', 'E', 'F']);
         });
-        it('throws when told to follow an inexistent route', () => {
-            expect(() => runner.followRoute('A-D-F')).to.throw('No Such Route');
+        describe(`==== in Exercise - Case 1 ====`, () => {
+            it('throws when passed an inexistent route', () => {
+                expect(() => runner.followRoute('A-D-F')).to.throw('No Such Route');
+            });
+            it('returns expected cost when following a correct route', () => {
+                [
+                    [ 'A-B-E',   4 ],
+                    [ 'A-D',    10 ],
+                    [ 'E-A-C-F', 8 ],
+                ].forEach(input => {
+                    const [route, expectedCost] = input;
+                    expect(runner.followRoute(route)).to.eql(expectedCost);
+                })
+            });
+        });
+        describe(`==== in Exercise - Case 2 ====`, () => {
+
         });
     })
 });

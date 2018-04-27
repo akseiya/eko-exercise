@@ -28,6 +28,7 @@ class graphRunner {
             totalCost += this.checkDirectRoute(from, nextNode);
             from = nextNode;
         })
+        return totalCost;
     }
 }
 
