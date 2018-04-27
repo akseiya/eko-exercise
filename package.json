@@ -1,0 +1,28 @@
+{
+  "name": "eko-exercise",
+  "version": "1.0.0",
+  "description": "Graph-traversing exercises for Eko",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/akseiya/eko-exercise.git"
+  },
+  "keywords": [
+    "graphs",
+    "exercise",
+    "eko"
+  ],
+  "author": "Michał Lech",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/akseiya/eko-exercise/issues"
+  },
+  "homepage": "https://github.com/akseiya/eko-exercise#readme",
+  "dependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^5.1.1"
+  }
+}
