@@ -31,7 +31,9 @@ describe('Graph runner', () => {
         });
 
         describe(`==== in Exercise - Case 2 ====`, () => {
-            it('')
+            it('finds indirect routes', () => {
+                
+            });
         });
     })
 });
