@@ -29,7 +29,6 @@ class graphRunner {
     }
 
     followDirectRoute(routeSpec) {
-        // clog(routeSpec);
         let totalCost = 0;
         let [from, ...route] = routeSpec.split('-');
         for(let i in route) {
@@ -44,7 +43,6 @@ class graphRunner {
         const routes = this.allRoutes.filter(
             r => (r.startsWith(from) && r.endsWith(to))
         );
-        // clog(routes);
         if(!maxSteps) return routes;
         return routes.filter(r => r.split('-').length <= maxSteps);
     }

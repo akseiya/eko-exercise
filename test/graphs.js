@@ -1,13 +1,9 @@
 const { expect } = require('chai');
-const { clog, graphRunner } = require('../index');
+const { graphRunner } = require('../index');
 
 describe('Graph runner', () => {
     describe('when created with the sample spec', () => {
         let runner = new graphRunner('AB1, AC4, AD10, BE3, CD4, CF2, DE1, EB3, EA2, FD1');;
-
-        // beforeEach(() => {
-        //     runner = new graphRunner('AB1, AC4, AD10, BE3, CD4, CF2, DE1, EB3, EA2, FD1');
-        // });
 
         it('stores an object with edges', () => {
             expect(runner.edges).to.be.an('object');
