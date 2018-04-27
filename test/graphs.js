@@ -3,11 +3,11 @@ const { clog, graphRunner } = require('../index');
 
 describe('Graph runner', () => {
     describe('when created with the sample spec', () => {
-        let runner;
+        let runner = new graphRunner('AB1, AC4, AD10, BE3, CD4, CF2, DE1, EB3, EA2, FD1');;
 
-        beforeEach(() => {
-            runner = new graphRunner('AB1, AC4, AD10, BE3, CD4, CF2, DE1, EB3, EA2, FD1');
-        });
+        // beforeEach(() => {
+        //     runner = new graphRunner('AB1, AC4, AD10, BE3, CD4, CF2, DE1, EB3, EA2, FD1');
+        // });
 
         it('stores an object with edges', () => {
             expect(runner.edges).to.be.an('object');
@@ -16,7 +16,9 @@ describe('Graph runner', () => {
 
         describe(`==== in Exercise - Case 1 ====`, () => {
             it('throws when passed an inexistent route', () => {
-                expect(() => runner.followDirectRoute('A-D-F')).to.throw('No Such Route');
+                expect(
+                    () => runner.followDirectRoute('A-D-F')
+                ).to.throw();
             });
             it('returns expected cost when following a correct route', () => {
                 [
@@ -31,9 +33,26 @@ describe('Graph runner', () => {
         });
 
         describe(`==== in Exercise - Case 2 ====`, () => {
-            it('finds indirect routes', () => {
-                
+            it('finds 5 indirect routes E -> E', () => {
+                expect(runner.getIndirectRoutes('E','E').length).to.eql(5);
             });
+            it('finds 4 E -> D routes with 4 stops max', () => {
+                expect(runner.getIndirectRoutes('E','D', 4).length).to.eql(4)
+            })
+        });
+
+        describe('==== in Exercise - Case 3 ====', () => {
+            //clog(runner);
+
+            [
+                ['E-D', 9],
+                ['E-E', 6],
+            ].forEach(testCase => {
+                const [fromTo, expectedMinCost] = testCase;
+                it(`finds min. cost on ${fromTo} route as ${expectedMinCost}`, () => {
+                    expect(runner.findCheapestRoute(fromTo)).to.eql(expectedMinCost);
+                })
+            })
         });
     })
 });

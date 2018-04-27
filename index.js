@@ -17,28 +17,50 @@ class graphRunner {
         for(let startingNode in this.edges) {
             stepsFrom(this, startingNode, [])
         };
+        return this;
     }
 
     checkDirectRoute(from, to, strict = true) {
         if(!this.edges[from] || !this.edges[from][to]) {
-            if(strict) throw new Error('No Such Route');
+            if(strict) throw new Error(`No Such Route ${from} - ${to}`);
             return null;
         }
         return this.edges[from][to];
     }
 
     followDirectRoute(routeSpec) {
+        // clog(routeSpec);
         let totalCost = 0;
         let [from, ...route] = routeSpec.split('-');
-        route.forEach(nextNode => {
+        for(let i in route) {
+            const nextNode = route[i];
             totalCost += this.checkDirectRoute(from, nextNode);
             from = nextNode;
-        })
+        }
         return totalCost;
     }
 
-    getIndirectRoutes(from, to) {
-        return this.allRoutes.filter;
+    getIndirectRoutes(from, to, maxSteps = null) {
+        const routes = this.allRoutes.filter(
+            r => (r.startsWith(from) && r.endsWith(to))
+        );
+        // clog(routes);
+        if(!maxSteps) return routes;
+        return routes.filter(r => r.split('-').length <= maxSteps);
+    }
+
+    findCheapestRoute(routeSpec) {
+        const [from, to] = routeSpec.split('-');
+        let minCost = 0;
+        const routes = this.getIndirectRoutes(from, to);
+        // I'd map this. If I haven't just learnt about THIS.
+        for(let i in routes) {
+            const currentCost = this.followDirectRoute(routes[i]);
+            if(minCost == 0 || minCost > currentCost) {
+                minCost = currentCost;
+            }
+        }
+        return minCost;
     }
 }
 
@@ -46,7 +68,6 @@ const storeRoute = (graph, route) => {
     if(route.length < 2) return;
     const routeSpec = route.join('-');
     if(graph.allRoutes.includes(routeSpec)) return;
-    clog(routeSpec);
     graph.allRoutes.push(routeSpec);
 }
 
