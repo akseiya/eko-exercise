@@ -15,21 +15,24 @@ describe('Graph runner', () => {
         });
 
         describe(`==== in Exercise - Case 1 ====`, () => {
-            it('throws when passed an inexistent route', () => {
+            it('throws when passed inexistent route A-D-F', () => {
                 expect(
                     () => runner.followDirectRoute('A-D-F')
                 ).to.throw();
             });
-            it('returns expected cost when following a correct route', () => {
-                [
-                    [ 'A-B-E',   4 ],
-                    [ 'A-D',    10 ],
-                    [ 'E-A-C-F', 8 ],
-                ].forEach(input => {
-                    const [route, expectedCost] = input;
+            
+            [
+                [ 'A-B-E',   4 ],
+                [ 'A-D',    10 ],
+                [ 'E-A-C-F', 8 ],
+            ].forEach(input => {
+                const [route, expectedCost] = input;
+                it(`returns cost of ${expectedCost} for route ${route}`, () => {
                     expect(runner.followDirectRoute(route)).to.eql(expectedCost);
-                })
-            });
+                });
+            })
+
+
         });
 
         describe(`==== in Exercise - Case 2 ====`, () => {
@@ -42,8 +45,6 @@ describe('Graph runner', () => {
         });
 
         describe('==== in Exercise - Case 3 ====', () => {
-            //clog(runner);
-
             [
                 ['E-D', 9],
                 ['E-E', 6],
