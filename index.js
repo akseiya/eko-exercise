@@ -1,10 +1,10 @@
-const clog = (wat) => {
+const clog = wat => {
     console.log(JSON.stringify(wat, null, 4));
     return wat;
 }
 
 class graphRunner {
-    constructor(nodesSpec) {
+    constructor(nodesSpec, uniqueNodes = false) {
         // The exercise doesn't worry about disconnected nodes, phew!
         this.edges = {}
         nodesSpec.split(/, +/).map(s => s.trim()).forEach(nodeSpec => {
@@ -14,8 +14,9 @@ class graphRunner {
         });
         // Cache all valid routes
         this.allRoutes = [];
+        const traverser = uniqueNodes ? scanUniqueNodes : scanUniqueSteps;
         for(let startingNode in this.edges) {
-            stepsFrom(this, startingNode, [])
+            traverser(this, startingNode);
         };
         return this;
     }
@@ -44,7 +45,7 @@ class graphRunner {
             r => (r.startsWith(from) && r.endsWith(to))
         );
         if(!maxSteps) return routes;
-        return routes.filter(r => r.split('-').length <= maxSteps);
+        return routes.filter(r => r.split('-').length <= maxSteps + 1);
     }
 
     findCheapestRoute(routeSpec) {
@@ -69,8 +70,7 @@ const storeRoute = (graph, route) => {
     graph.allRoutes.push(routeSpec);
 }
 
-const stepsFrom = (graph, node, routeSoFar) => {
-    const routeLen = routeSoFar.length;
+const scanUniqueNodes = (graph, node, routeSoFar = []) => {
     const routeToStore = [...routeSoFar, node];
     storeRoute(graph, routeToStore);
     for(nextNode in graph.edges[node]) {
@@ -82,9 +82,34 @@ const stepsFrom = (graph, node, routeSoFar) => {
         }
         // New node found, recurse!
         if(lastPosition == -1) {
-            stepsFrom(graph, nextNode, [...routeSoFar, node]);
+            scanUniqueNodes(graph, nextNode, [...routeSoFar, node]);
         }
     }
+};
+
+const scanUniqueSteps = (graph, node, lastNode = null, stepsSoFar = []) => {
+    let stepsNow;
+    if(stepsSoFar.length > 10) return;
+
+    if(lastNode) {
+        const currentStep = `${lastNode}-${node}`;
+        if(stepsSoFar.includes(currentStep)) return;
+        stepsNow = [...stepsSoFar, currentStep];
+        storeRoute(graph, steps2RouteSpec(stepsNow));
+    }
+
+    for(nextNode in graph.edges[node]) {
+        scanUniqueSteps(graph, nextNode, node, stepsNow);
+    }
+};
+
+const steps2RouteSpec = steps => {
+    const nodePairs = steps.map(s => s.split('-'));
+    const [[ firstNode ]] = nodePairs;
+    return nodePairs.reduce(
+        (route, nextPair) => [...route,nextPair[1]], 
+        [firstNode]
+    );
 };
 
 module.exports = {
